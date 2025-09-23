@@ -28,6 +28,7 @@ fn main() {
         next: head,
     }));
 
+    // as_ref() gives a reference to the value inside the Option without taking ownership of it.
     let mut start_node = head.as_ref();    
     while let Some(node) = start_node {
         print!("{} -> ", node.data);
@@ -70,8 +71,8 @@ fn main() {
         }
 
         if x == n - 2 {
-            if let Some(next_node) = node.next.as_mut() {
-                node.next = next_node.next.take(); 
+            if let Some(node_to_be_deleted) = node.next.as_mut() {
+                node.next = node_to_be_deleted.next.take(); 
                 // what is take() ? 
                 // take() method takes the value out of an Option, leaving a None in its place.
             }
@@ -88,4 +89,41 @@ fn main() {
         print!("{} -> ", node.data);
         start_node = node.next.as_ref();
     }
+
+    // add 3rd element as 300
+    let mut start_node = head.as_mut();
+
+    let n = 1 ;
+    let mut x = 0;
+    while let Some(node) = start_node {
+        if n == 1 {
+            head = Some(Box::new(Node {
+                data: 300,
+                next: head,
+            }));
+            break;
+        }
+
+        if x == n - 2 {
+            let old_next = node.next.take();
+            let new_node = Box::new(Node {
+                data: 300,
+                next: old_next,
+            });
+            node.next = Some(new_node);
+            break;
+        }
+        
+        x += 1;
+        start_node = node.next.as_mut();
+    }
+   
+    println!("\nAfter Adding new at 3rd pos element ");
+    let mut start_node = head.as_ref();    
+    while let Some(node) = start_node {
+        print!("{} -> ", node.data);
+        start_node = node.next.as_ref();
+    }
+
+
 }
