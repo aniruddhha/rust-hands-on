@@ -26,7 +26,7 @@ fn add_nth(head: &mut Option<Box<Node>>, n: usize, data: i32) {
     }
 
     let mut start_node = head.as_mut();
-    let mut cnt = 0;
+    let mut cnt = 1;
 
     while let Some(node) = start_node {
         if cnt == n - 1 {
