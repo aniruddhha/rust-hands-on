@@ -12,6 +12,7 @@ trait ListBasic {
     fn delete_nth(&mut self, position: usize);
     fn update_nth(&mut self, n: usize, data: i32);
     fn display(&self);
+    fn reverse(&mut self);
 }
 
 impl ListBasic for LinkedList {
@@ -97,6 +98,32 @@ impl ListBasic for LinkedList {
             current = node.next.as_mut();
         }
     }
+
+    fn reverse(&mut self) {
+        // The part we’ve already reversed
+        let mut reversed: Option<Box<Node>> = None;
+
+        // The part we still need to process (take ownership of head)
+        let mut current: Option<Box<Node>> = self.head.take();
+
+        // Process nodes one by one
+        while let Some(mut current_node) = current {
+            // 1) Remember the rest of the list
+            let next_unprocessed = current_node.next.take();
+
+            // 2) Point current node back to the reversed prefix
+            current_node.next = reversed;
+
+            // 3) Grow the reversed prefix to include current node
+            reversed = Some(current_node);
+
+            // 4) Continue with the rest
+            current = next_unprocessed;
+        }
+
+        // Install the new head (fully reversed list)
+        self.head = reversed;
+    }
 }
 
 fn main() {
@@ -128,6 +155,9 @@ fn main() {
 
        list.update_nth(3, 444);
        list.display();
+
+       list.reverse();
+         list.display();
 }
 
 
